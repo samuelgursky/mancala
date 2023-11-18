@@ -1,0 +1,25 @@
+/* globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* You can add global styles after Tailwind's base, components, and utilities */
+body {
+  @apply bg-gray-100 text-gray-800;
+}
+
+#__next {
+  @apply flex flex-col items-center justify-center min-h-screen;
+}
+
+h1 {
+  @apply text-gray-700 text-4xl mb-8;
+}
+
+a {
+  @apply text-indigo-600 no-underline;
+}
+
+.container {
+  @apply max-w-4xl mx-auto px-4;
+}
