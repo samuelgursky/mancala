@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 // Constants for the game
 const INITIAL_STONES = 4;
 const PIT_COUNT = 6;
+const STORE_INDEX = PIT_COUNT; // Index of the store in each player's row
 
 // TypeScript types for the board state and player
 type BoardState = number[][];
@@ -20,72 +21,75 @@ export const useMancalaGame = () => {
     const initialBoard: BoardState = Array(2)
       .fill(null)
       .map(() => Array(PIT_COUNT + 1).fill(INITIAL_STONES));
-    initialBoard[0][PIT_COUNT] = 0; // Player 1's Mancala pit
-    initialBoard[1][PIT_COUNT] = 0; // Player 2's Mancala pit
+    // Setting the initial stones in the stores to 0
+    initialBoard[0][STORE_INDEX] = 0;
+    initialBoard[1][STORE_INDEX] = 0;
     setBoard(initialBoard);
   }, []);
 
   const handlePitClick = (player: Player, pitIndex: number) => {
-    if (gameOver || player !== currentPlayer || board[player][pitIndex] === 0) {
+    // No action if it's not the current player's turn, the game is over, or the selected pit is empty
+    if (player !== currentPlayer || gameOver || board[player][pitIndex] === 0) {
       return;
     }
 
-    let stones = board[player][pitIndex];
-    board[player][pitIndex] = 0;
+    // Create a new board state to avoid mutating the current state
+    const newBoard = board.map(row => [...row]);
+    let stones = newBoard[player][pitIndex];
+    newBoard[player][pitIndex] = 0; // Remove stones from the selected pit
+
     let currentRow = player;
     let currentIndex = pitIndex;
-    let lastStoneIndex = 0;
-    let lastStoneRow = player;
 
     while (stones > 0) {
-      currentIndex++;
-      if (currentIndex > PIT_COUNT) {
-        currentRow = 1 - currentRow as Player;
-        currentIndex = 0;
-      }
-
-      // Skip opponent's Mancala pit
-      if (currentRow !== currentPlayer && currentIndex === PIT_COUNT) {
+      currentIndex = (currentIndex + 1) % (PIT_COUNT + 1); // Move to the next pit
+      
+      // Skip opponent's store
+      if (currentRow !== player && currentIndex === STORE_INDEX) {
+        currentRow = 1 - currentRow as Player; // Switch rows
         continue;
       }
 
-      // Place stones in pits
-      if (!(currentIndex === PIT_COUNT && currentRow !== currentPlayer)) {
-        board[currentRow][currentIndex]++;
-        stones--;
-        lastStoneIndex = currentIndex;
-        lastStoneRow = currentRow;
+      // Place a stone in the current pit
+      newBoard[currentRow][currentIndex]++;
+      stones--;
+
+      // If it was the last stone
+      if (stones === 0) {
+        // Extra turn if the last stone lands in the player's store
+        if (currentRow === player && currentIndex === STORE_INDEX) {
+          // The currentPlayer will remain the same, so don't update it
+        } else {
+          // Switch to the other player if the last stone did not land in the player's store
+          setCurrentPlayer(1 - player as Player);
+        }
+        
+        // Capture logic
+        if (currentRow === player && currentIndex < PIT_COUNT && newBoard[currentRow][currentIndex] === 1) {
+          const oppositeRow = 1 - currentRow as Player;
+          const oppositePitIndex = PIT_COUNT - 1 - currentIndex;
+          // Move captured stones to the player's store
+          newBoard[player][STORE_INDEX] += newBoard[oppositeRow][oppositePitIndex] + 1;
+          // Clear the captured pit and the pit the last stone was placed in
+          newBoard[oppositeRow][oppositePitIndex] = 0;
+          newBoard[currentRow][currentIndex] = 0;
+        }
       }
     }
 
-    // Extra turn logic
-    if (lastStoneIndex === PIT_COUNT && lastStoneRow === currentPlayer) {
-      // Do not switch player if last stone lands in player's Mancala pit
-    } else {
-      // Capture logic
-      if (lastStoneIndex < PIT_COUNT && lastStoneRow === currentPlayer && board[lastStoneRow][lastStoneIndex] === 1) {
-        const oppositeIndex = PIT_COUNT - lastStoneIndex - 1;
-        const capturedStones = board[1 - lastStoneRow][oppositeIndex];
-        board[currentPlayer][PIT_COUNT] += capturedStones + 1; // Add captured stones to player's Mancala pit
-        board[1 - lastStoneRow][oppositeIndex] = 0;
-        board[lastStoneRow][lastStoneIndex] = 0;
-      }
-      // Switch player
-      setCurrentPlayer(1 - currentPlayer as Player);
-    }
-
-    // Check for game over
-    const isGameOver = board[currentPlayer].slice(0, PIT_COUNT).every(pit => pit === 0);
-    if (isGameOver) {
-      const remainingStones = board[1 - currentPlayer].slice(0, PIT_COUNT).reduce((sum, pit) => sum + pit, 0);
-      board[1 - currentPlayer][PIT_COUNT] += remainingStones;
-      board[1 - currentPlayer].fill(0, 0, PIT_COUNT); // Clear pits
+    // Check if the game is over
+    if (newBoard[currentPlayer].slice(0, PIT_COUNT).every(pit => pit === 0)) {
+      // Move remaining stones to the opponent's store
+      const opponent = 1 - currentPlayer as Player;
+      const remainingStones = newBoard[opponent].slice(0, PIT_COUNT).reduce((sum, pit) => sum + pit, 0);
+      newBoard[opponent][STORE_INDEX] += remainingStones;
+      newBoard[opponent].fill(0, 0, PIT_COUNT); // Clear pits
       setGameOver(true);
     }
 
-    // Update board and scores
-    setBoard(board.map(row => [...row]));
-    setPlayerScores([board[0][PIT_COUNT], board[1][PIT_COUNT]]);
+    // Update the state with the new board and the scores
+    setBoard(newBoard);
+    setPlayerScores([newBoard[0][STORE_INDEX], newBoard[1][STORE_INDEX]]);
   };
 
   return { board, currentPlayer, gameOver, handlePitClick, playerScores };
