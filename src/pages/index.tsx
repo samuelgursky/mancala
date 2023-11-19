@@ -11,7 +11,6 @@ const Home: React.FC = () => {
       </Head>
 
       <main className="flex flex-col items-center w-full flex-1 px-4 text-center">
-        <h1 className="text-4xl mb-6">Welcome to Mancala!</h1>
         <Board />
       </main>
     </div>
