@@ -19,13 +19,13 @@ Mancala is a classic two-player turn-based strategy board game. This repository 
 4. Open your web browser and navigate to `http://localhost:3000` to play the game.
 5. Follow the on-screen instructions to take turns and make your moves.
 
-## Features
+## Features to be implemented 
 
-- Responsive design for both desktop and mobile devices.
-- Player turn indicators.
-- Score display for both players.
-- Validation to ensure that the score increases by only 1 point with each move.
-- Highlighted current player's turn.
+- Reset Button. 
+- Winning Animation. 
+- Mobile & Desktop Reactive Design.
+- Computer players. 
+- Online Multiplayer.
 
 Enjoy playing Mancala!
 
