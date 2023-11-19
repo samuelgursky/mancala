@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Mancala Game
 
-## Getting Started
+Mancala is a classic two-player turn-based strategy board game. This repository contains a simple implementation of the Mancala game built using React.
 
-First, run the development server:
+## Rules
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- The game is played by two players, Player 1 and Player 2, who sit on opposite sides of the board.
+- Each player has six pits in front of them, and there is a store (also called Mancala) to their right.
+- The pits and the stores are initially filled with a fixed number of stones (usually 4 stones per pit).
+- Players take turns to choose a pit on their side and distribute the stones from that pit counterclockwise, one by one, into the pits and their own store.
+- If the last stone lands in a player's store, they get an extra turn.
+- If the last stone lands in an empty pit on the player's side, they capture all the stones in the opponent's pit directly across the board from the empty pit and place them in their store.
+- The game ends when all the pits on one player's side are empty. The player with stones remaining on their side captures those stones, and the player with the most stones in their store wins.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How to Play
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Clone this repository to your local machine.
+2. Install dependencies using `npm install` or `yarn install`.
+3. Start the development server using `npm start` or `yarn start`.
+4. Open your web browser and navigate to `http://localhost:3000` to play the game.
+5. Follow the on-screen instructions to take turns and make your moves.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Features
 
-## Learn More
+- Responsive design for both desktop and mobile devices.
+- Player turn indicators.
+- Score display for both players.
+- Capture logic to handle capturing opponent's stones.
+- Validation to ensure that the score increases by only 1 point with each move.
+- Highlighted current player's turn.
 
-To learn more about Next.js, take a look at the following resources:
+Enjoy playing Mancala!
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Feel free to customize the game further and add more features if desired. If you have any questions or need assistance, please don't hesitate to reach out.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Happy gaming!
