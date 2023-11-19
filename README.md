@@ -9,7 +9,6 @@ Mancala is a classic two-player turn-based strategy board game. This repository 
 - The pits and the stores are initially filled with a fixed number of stones (usually 4 stones per pit).
 - Players take turns to choose a pit on their side and distribute the stones from that pit counterclockwise, one by one, into the pits and their own store.
 - If the last stone lands in a player's store, they get an extra turn.
-- If the last stone lands in an empty pit on the player's side, they capture all the stones in the opponent's pit directly across the board from the empty pit and place them in their store.
 - The game ends when all the pits on one player's side are empty. The player with stones remaining on their side captures those stones, and the player with the most stones in their store wins.
 
 ## How to Play
@@ -25,7 +24,6 @@ Mancala is a classic two-player turn-based strategy board game. This repository 
 - Responsive design for both desktop and mobile devices.
 - Player turn indicators.
 - Score display for both players.
-- Capture logic to handle capturing opponent's stones.
 - Validation to ensure that the score increases by only 1 point with each move.
 - Highlighted current player's turn.
 
