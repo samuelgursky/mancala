@@ -43,7 +43,7 @@ export const useMancalaGame = () => {
 
     while (stones > 0) {
       currentIndex = (currentIndex + 1) % (PIT_COUNT + 1); // Move to the next pit
-      
+
       // Skip opponent's store
       if (currentRow !== player && currentIndex === STORE_INDEX) {
         currentRow = 1 - currentRow as Player; // Switch rows
@@ -63,16 +63,20 @@ export const useMancalaGame = () => {
           // Switch to the other player if the last stone did not land in the player's store
           setCurrentPlayer(1 - player as Player);
         }
-        
+
         // Capture logic
         if (currentRow === player && currentIndex < PIT_COUNT && newBoard[currentRow][currentIndex] === 1) {
           const oppositeRow = 1 - currentRow as Player;
           const oppositePitIndex = PIT_COUNT - 1 - currentIndex;
-          // Move captured stones to the player's store
-          newBoard[player][STORE_INDEX] += newBoard[oppositeRow][oppositePitIndex] + 1;
-          // Clear the captured pit and the pit the last stone was placed in
-          newBoard[oppositeRow][oppositePitIndex] = 0;
-          newBoard[currentRow][currentIndex] = 0;
+
+          // Check if capturing is valid before proceeding
+          if (newBoard[oppositeRow][oppositePitIndex] > 0) {
+            // Move captured stones to the player's store
+            newBoard[player][STORE_INDEX] += newBoard[oppositeRow][oppositePitIndex] + 1;
+            // Clear the captured pit and the pit the last stone was placed in
+            newBoard[oppositeRow][oppositePitIndex] = 0;
+            newBoard[currentRow][currentIndex] = 0;
+          }
         }
       }
     }
