@@ -23,8 +23,3 @@ a {
 .container {
   @apply max-w-4xl mx-auto px-4;
 }
-
-.rotate-board {
-  transform: rotate(180deg);
-  transition: transform 0.5s; /* Add a smooth transition effect */
-}
